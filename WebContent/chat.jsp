@@ -4,6 +4,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js">
+</script>
 <%
 	request.setCharacterEncoding("UTF-8");
 	if (session.getAttribute("nickname") == null) {
@@ -13,12 +15,27 @@
 	}
 %>
 
-<title>Insert title here</title>
+<title>chat</title>
+<script type="text/javascript">
+$(function(){
+	$('button').click(function() {
+		$("#msg").html($("#text").val() + "<br>" + $("#msg").html());
+	});
+});
+</script>
 </head>
 <body>
-chat
+<div>
+	<button>送信</button>
+</div>
+<input type="text" value="xyz" id="text">
+<br>
+投稿者名：
 <%
 	out.println(session.getAttribute("nickname"));
 %>
+<br>
+<div id="msg"></div>
+
 </body>
 </html>
