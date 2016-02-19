@@ -1,3 +1,5 @@
+<%@page import="java.net.URLEncoder"%>
+<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@page import="com.sun.xml.internal.ws.util.StringUtils"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -8,22 +10,30 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 
-	String aaaa = request.getParameter("logout");
-	if (request.getParameter("logout") != null) {
-		session.removeAttribute("nickname");
-	}
-
+	//ニックネームが入力された場合はクッキーへ保存しチャット画面へ遷移
 	if (request.getParameter("nickname") != null
 			&& request.getParameter("nickname").trim().isEmpty() == false) {
-
-		session.setMaxInactiveInterval(60 * 60 * 24 * 10);
-		session.setAttribute("nickname", request.getParameter("nickname"));
-		//TODO cookieの期限
+		Cookie cookie = new Cookie("nickname",URLEncoder.encode(request.getParameter("nickname"),"UTF-8"));
+		cookie.setMaxAge(Integer.MAX_VALUE);
+		response.addCookie(cookie);
 %>
 <meta http-equiv="refresh" content="0;URL=./chat.jsp">
 <%
 	}
-	if (session.getAttribute("nickname") != null) {
+
+	//クッキーの存在チェック
+	Cookie cookies[] = request.getCookies();
+	String nickname = null;
+	if (cookies != null) {
+		for (Cookie c : cookies) {
+			if ("nickname".equals(c.getName())) {
+				nickname = c.getValue();
+			}
+		}
+	}
+
+	//クッキーが存在する場合はチャット画面へ遷移
+	if (cookies != null && nickname != null) {
 %>
 		<meta http-equiv="refresh" content="0;URL=./chat.jsp">
 <%

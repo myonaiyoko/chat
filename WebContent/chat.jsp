@@ -1,3 +1,4 @@
+<%@page import="java.net.URLDecoder"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -8,7 +9,19 @@
 </script>
 <%
 	request.setCharacterEncoding("UTF-8");
-	if (session.getAttribute("nickname") == null) {
+
+	//クッキーの存在チェック
+	Cookie cookies[] = request.getCookies();
+	String nickname = null;
+	if (cookies != null) {
+		for (Cookie c : cookies) {
+			if ("nickname".equals(c.getName())) {
+				nickname = URLDecoder.decode(c.getValue(),"UTF-8");
+			}
+		}
+	}
+	//クッキーが存在しない場合はログイン画面へ遷移
+	if (cookies == null || nickname == null) {
 %>
 		<meta http-equiv="refresh"content="0;URL=./index.jsp">
 <%
@@ -18,7 +31,7 @@
 <title>chat</title>
 <script type="text/javascript">
 $(function(){
-	$('button').click(function() {
+	$('.msgbtn').click(function() {
 		$("#msg").html($("#text").val() + "<br>" + $("#msg").html());
 	});
 });
@@ -27,15 +40,15 @@ $(function(){
 <body>
 投稿者名：
 <%
-	out.println(session.getAttribute("nickname"));
+	out.println(nickname);
 %>
 <br>
 発言：
 <input type="text" id="text">
 <div>
-	<button>送信</button>
+	<button class="msgbtn">送信</button>
 </div>
-<form action="./index.jsp">
+<form action="./logout.jsp">
 	<button type="submit" name="logout" value="yes">ログアウト</button>
 </form>
 <hr>
