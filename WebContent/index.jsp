@@ -8,9 +8,15 @@
 <%
 	request.setCharacterEncoding("UTF-8");
 
+	String aaaa = request.getParameter("logout");
+	if (request.getParameter("logout") != null) {
+		session.removeAttribute("nickname");
+	}
+
 	if (request.getParameter("nickname") != null
 			&& request.getParameter("nickname").trim().isEmpty() == false) {
 
+		session.setMaxInactiveInterval(60 * 60 * 24 * 10);
 		session.setAttribute("nickname", request.getParameter("nickname"));
 		//TODO cookieの期限
 %>
@@ -27,7 +33,8 @@
 </head>
 <body>
 	<form action="./index.jsp" method="post">
-		ニックネーム：<input type="text" name="nickname"> <input type="submit">
+		ニックネーム：<input type="text" name="nickname">
+		<button type="submit">ログイン</button>
 	</form>
 
 </body>

@@ -10,7 +10,7 @@
 	request.setCharacterEncoding("UTF-8");
 	if (session.getAttribute("nickname") == null) {
 %>
-		<meta http-equiv="refresh" content="0;URL=./index.jsp">
+		<meta http-equiv="refresh"content="0;URL=./index.jsp">
 <%
 	}
 %>
@@ -25,15 +25,21 @@ $(function(){
 </script>
 </head>
 <body>
-<div>
-	<button>送信</button>
-</div>
-<input type="text" value="xyz" id="text">
-<br>
 投稿者名：
 <%
 	out.println(session.getAttribute("nickname"));
 %>
+<br>
+発言：
+<input type="text" id="text">
+<div>
+	<button>送信</button>
+</div>
+<form action="./index.jsp">
+	<button type="submit" name="logout" value="yes">ログアウト</button>
+</form>
+<hr>
+<br>
 <br>
 <div id="msg"></div>
 
