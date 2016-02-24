@@ -1,4 +1,8 @@
+<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@page import="java.net.URLDecoder"%>
+<%@page import="java.util.ArrayList" %>
+<%@page import="utils.ChatDAO" %>
+<%@page import="utils.Chat" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -32,7 +36,12 @@
 <script type="text/javascript">
 $(function(){
 	$('.msgbtn').click(function() {
-		$("#msg").html($("#text").val() + "<br>" + $("#msg").html());
+		var date = new Date( jQuery.now()).toLocaleString();
+		$("#msg").html(
+				 "投稿日時：" + date + "<br>"
+				+ "投稿者　：" + <% out.print('"' + nickname + '"'); %> + "<br>"
+				+ "本　文　："+ $("#text").val() + "<br><hr>" + $("#msg").html()
+		);
 	});
 });
 </script>
@@ -52,9 +61,18 @@ $(function(){
 	<button type="submit" name="logout" value="yes">ログアウト</button>
 </form>
 <hr>
-<br>
-<br>
-<div id="msg"></div>
+<div id="msg">
+<%
+	ChatDAO chatDao = new ChatDAO();
+	ArrayList<Chat> chatList = new ArrayList<Chat>();
+	chatList = chatDao.gettSelectAll();
+	for (Chat c : chatList) {
+		out.println("投稿日時：" + c.getDate().toString());
+		out.println("投稿者　：" + c.getName());
+		out.println("本　文　：" + c.getText());
+	}
+%>
+</div>
 
 </body>
 </html>
