@@ -1,5 +1,6 @@
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.util.Date;
 
 import utils.Chat;
 import utils.ChatDAO;
@@ -15,16 +16,19 @@ import utils.ChatDAO;
 public class action {
 	public static void main(String[] args) throws SQLException {
 
-		ArrayList<Chat> chatList = new ArrayList<>();
 		ChatDAO d = new ChatDAO();
+		Chat c = new Chat();
+		c.setName("綾小路翔");
+		c.setText("てすとテスト試験");
 
-		chatList = d.gettSelectAll();
+		try {
+			Date da = DateFormat.getDateTimeInstance().parse("2016/02/25 23:50:33");
+			c.setDate(da);
+		} catch (Exception e) {
 
-		for (Chat chat : chatList) {
-			System.out.println(chat.getName());
-			System.out.println(chat.getText());
-			System.out.println(chat.getDate());
 		}
+
+		d.insertValue(c);
 
 	}
 }

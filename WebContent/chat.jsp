@@ -3,6 +3,7 @@
 <%@page import="java.util.ArrayList" %>
 <%@page import="utils.ChatDAO" %>
 <%@page import="utils.Chat" %>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -67,9 +68,9 @@ $(function(){
 	ArrayList<Chat> chatList = new ArrayList<Chat>();
 	chatList = chatDao.gettSelectAll();
 	for (Chat c : chatList) {
-		out.println("投稿日時：" + c.getDate().toString());
-		out.println("投稿者　：" + c.getName());
-		out.println("本　文　：" + c.getText());
+		out.println("投稿日時：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(c.getDate().getTime()) + "<br>");
+		out.println("投稿者　：" + c.getName() + "<br>");
+		out.println("本　文　：" + c.getText() + "<br><hr>");
 	}
 %>
 </div>
