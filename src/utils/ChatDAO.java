@@ -46,7 +46,6 @@ public class ChatDAO {
 				+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(chat
 						.getDate()) + "' as datetime))";
 		stmt.executeUpdate(insertSQL);
-		System.out.println(insertSQL);
 
 	}
 
