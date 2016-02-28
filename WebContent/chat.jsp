@@ -1,4 +1,5 @@
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
+<%@page import="java.util.Date"%>
 <%@page import="java.net.URLDecoder"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="utils.ChatDAO"%>
@@ -38,30 +39,41 @@
 <title>chat</title>
 <script type="text/javascript">
 	$(function() {
-		$('.msgbtn').click(
-				function() {
-					var nickname = <%out.print('"' + nickname + '"');%>
-					var maintext = $("#text").val();
-					var date = new Date(jQuery.now()).toLocaleString();
-					// 発言を画面へ追加表示
-					$("#msg").html(
-							"投稿日時：" + date + "<br>" + "投稿者　：" + nickname
-									+ "<br>" + "本　文　：" + maintext + "<br><hr>"
-									+ $("#msg").html());
+		$('.msgbtn').click(function() {
+			var nickname = <% out.print('"' + nickname + '"'); %>
+			var maintext = $("#text").val();
+			var d = new Date();
+			var yyyy = d.getFullYear();
+			var MM = ('0' + (d.getMonth() + 1)).slice(-2);
+			var dd = ('0' + d.getDate()).slice(-2);
+			var HH = ('0' + d.getHours()).slice(-2);
+			var mm = ('0' + d.getMinutes()).slice(-2);
+			var ss = ('0' + d.getSeconds()).slice(-2);
+			var date = yyyy + "/" + MM + "/" + dd + " " + HH + ":" + mm + ":" + ss;
+//			var date = new Date(jQuery.now()).toLocaleString();
+	// 発言を画面へ追加表示
+			$("#msg").html(
+				"投稿日時：" + date + "<br>"
+				+ "投稿者　：" + nickname + "<br>"
+				+ "本　文　：" + maintext + "<br><hr>"
+				+ $("#msg").html());
 
-					// ajaxでDBへデータ追加
-					var postData = {request : nickname + "," + maintext + "," + date} ;
-					$.ajax({
-						type : "POST",
-						url : "insert.jsp",
-						dataType : "text",
-						data : postData,
-					}).done(function(data) {
-					}).fail(function(data) {
-						alert("error");
-					});
+			// ajaxでDBへデータ追加
+			var postData = {
+				request : nickname + "," + maintext + ","
+						+ date
+			};
+			$.ajax({
+				type : "POST",
+				url : "insert.jsp",
+				dataType : "text",
+				data : postData,
+			}).done(function(data) {
+			}).fail(function(data) {
+				alert("error");
+			});
 
-				});
+		});
 	});
 </script>
 </head>
@@ -86,8 +98,8 @@
 			chatList = chatDao.gettSelectAll();
 			for (Chat c : chatList) {
 				out.println("投稿日時："
-						+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(c
-								.getDate().getTime()) + "<br>");
+					+ new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(c.getDate().getTime())
+					+ "<br>");
 				out.println("投稿者　：" + c.getName() + "<br>");
 				out.println("本　文　：" + c.getText() + "<br><hr>");
 			}

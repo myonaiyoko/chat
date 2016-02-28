@@ -16,7 +16,7 @@ import java.util.ArrayList;
  *
  */
 public class ChatDAO {
-	private String selectAll = "select id, name, text, date from chat order by date desc";
+	private String selectAll = "select id, name, text, date from chat order by id desc";
 	private String insertSQL = "insert into chat(name, text, date) value('";
 
 	public ArrayList<Chat> gettSelectAll() throws SQLException {
