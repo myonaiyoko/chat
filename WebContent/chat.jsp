@@ -4,6 +4,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="utils.ChatDAO"%>
 <%@page import="utils.Chat"%>
+<%@page import="utils.ChatWebSocket"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -32,13 +33,31 @@
 	if (cookies == null || nickname == null) {
 %>
 <meta http-equiv="refresh" content="0;URL=./index.jsp">
+
 <%
 	}
 %>
-
 <title>chat</title>
 <script type="text/javascript">
 	$(function() {
+		// web socket
+		var ws = new WebSocket("ws://192.168.1.8:8080/Chat/echo");
+
+		ws.onopen = function() {
+		}
+		ws.onmessage = function(message) {
+//			$("#msg").prepend("投稿日時：" + date + "<br>投稿者　：" + nickname + "<br>本　文　：" + maintext + "<br><hr>");
+			$("#msg").prepend(message.data);
+		}
+		ws.onerror = function() {
+		}
+		ws.onclose = function() {
+		}
+
+		$(window).unload(function() {
+			ws.onclose();
+		})
+
 		$('.msgbtn').click(function() {
 			var nickname = <% out.print('"' + nickname + '"'); %>
 			var maintext = $("#text").val();
@@ -50,13 +69,13 @@
 			var mm = ('0' + d.getMinutes()).slice(-2);
 			var ss = ('0' + d.getSeconds()).slice(-2);
 			var date = yyyy + "/" + MM + "/" + dd + " " + HH + ":" + mm + ":" + ss;
-//			var date = new Date(jQuery.now()).toLocaleString();
-	// 発言を画面へ追加表示
-			$("#msg").html(
-				"投稿日時：" + date + "<br>"
-				+ "投稿者　：" + nickname + "<br>"
-				+ "本　文　：" + maintext + "<br><hr>"
-				+ $("#msg").html());
+
+			var message = "投稿日時：" + date + "<br>投稿者　：" + nickname + "<br>本　文　：" + maintext + "<br><hr>";
+
+			ws.send(message);
+
+			// 発言を画面へ追加表示
+//			$("#msg").prepend(message);
 
 			// ajaxでDBへデータ追加
 			var postData = {
@@ -79,7 +98,7 @@
 </head>
 <body>
 	投稿者名：
-	<%
+<%
 	out.println(nickname);
 %>
 	<br> 発言：
@@ -92,6 +111,7 @@
 	</form>
 	<hr>
 	<div id="msg">
+
 		<%
 			ChatDAO chatDao = new ChatDAO();
 			ArrayList<Chat> chatList = new ArrayList<Chat>();
@@ -103,6 +123,7 @@
 				out.println("投稿者　：" + c.getName() + "<br>");
 				out.println("本　文　：" + c.getText() + "<br><hr>");
 			}
+
 		%>
 	</div>
 
