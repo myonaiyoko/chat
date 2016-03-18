@@ -1,3 +1,4 @@
+<%@page import="java.sql.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="utils.ChatDAO"%>
 <%@page import="utils.Chat"%>
@@ -10,13 +11,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 
-
-
 </head>
 <body>
 	<%
 		String pData = request.getParameter("request");
-
 
 		String[] strAry = pData.split(",");
 		String name = strAry[0];
@@ -26,7 +24,7 @@
 		Chat c = new Chat();
 		c.setName(name);
 		c.setText(text);
-		c.setDate(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(sDate));
+		c.setDate(sDate);
 
 		ChatDAO cd = new ChatDAO();
 		cd .insertValue(c);

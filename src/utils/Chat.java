@@ -1,6 +1,5 @@
 package utils;
 
-import java.util.Date;
 /**
  *
  */
@@ -13,7 +12,7 @@ public class Chat {
 	private int id;
 	private String name;
 	private String text;
-	private Date date;
+	private String date;
 
 	/**
 	 * @return id
@@ -54,13 +53,13 @@ public class Chat {
 	/**
 	 * @return date
 	 */
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 	/**
 	 * @param date セットする date
 	 */
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 

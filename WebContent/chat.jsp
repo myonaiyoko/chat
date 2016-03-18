@@ -41,17 +41,20 @@
 <script type="text/javascript">
 	$(function() {
 		// web socket
-		var ws = new WebSocket("ws://192.168.1.8:8080/Chat/echo");
+		var ws = new WebSocket("ws://192.168.1.7:8080/Chat/echo");
 
 		ws.onopen = function() {
+			alert("on open");
 		}
 		ws.onmessage = function(message) {
-//			$("#msg").prepend("投稿日時：" + date + "<br>投稿者　：" + nickname + "<br>本　文　：" + maintext + "<br><hr>");
+			alert("get message");
 			$("#msg").prepend(message.data);
 		}
 		ws.onerror = function() {
+			alert("on error");
 		}
 		ws.onclose = function() {
+			alert("on close");
 		}
 
 		$(window).unload(function() {
@@ -73,9 +76,7 @@
 			var message = "投稿日時：" + date + "<br>投稿者　：" + nickname + "<br>本　文　：" + maintext + "<br><hr>";
 
 			ws.send(message);
-
-			// 発言を画面へ追加表示
-//			$("#msg").prepend(message);
+			alert(message);
 
 			// ajaxでDBへデータ追加
 			var postData = {
@@ -117,9 +118,7 @@
 			ArrayList<Chat> chatList = new ArrayList<Chat>();
 			chatList = chatDao.gettSelectAll();
 			for (Chat c : chatList) {
-				out.println("投稿日時："
-					+ new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(c.getDate().getTime())
-					+ "<br>");
+				out.println("投稿日時：" + c.getDate() + "<br>");
 				out.println("投稿者　：" + c.getName() + "<br>");
 				out.println("本　文　：" + c.getText() + "<br><hr>");
 			}
